@@ -2,10 +2,10 @@
 
 CONTAINER_NAME="oracle-db"
 SQL_FILE="/init.sql"
-DB_USER="sys"
+SQL_FILE_DROP="/drop_tables.sql"
 DB_PASSWORD="password"
+DB_USER="pacificode_user"
 DB_SERVICE="XEPDB1"
-SYSDBA_OPTION="as sysdba"
 
 # Verificar si el contenedor está en ejecución
 if ! docker ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
@@ -15,7 +15,8 @@ fi
 
 # Copiar el archivo SQL al contenedor
 echo "Copiando el archivo SQL al contenedor..."
-docker cp init.sql "${CONTAINER_NAME}:${SQL_FILE}"
+docker cp ./migrations/drop_tables.sql "${CONTAINER_NAME}:${SQL_FILE_DROP}"
+docker cp ./migrations/init.sql "${CONTAINER_NAME}:${SQL_FILE}"
 
 
 # Ejecutar el script de migración dentro del contenedor
@@ -24,9 +25,10 @@ docker exec -it "${CONTAINER_NAME}" bash -c "
   echo 'Conectando a la base de datos y ejecutando el script...';
   echo 'SET FEEDBACK ON;' > temp_script.sql;
   echo 'SET SERVEROUTPUT ON;' >> temp_script.sql;
+  echo '@${SQL_FILE_DROP};' >> temp_script.sql;
   echo '@${SQL_FILE};' >> temp_script.sql;
   echo 'EXIT;' >> temp_script.sql;
-  sqlplus ${DB_USER}/${DB_PASSWORD}@localhost/${DB_SERVICE} ${SYSDBA_OPTION} @temp_script.sql
+  sqlplus ${DB_USER}/${DB_PASSWORD}@localhost/${DB_SERVICE} @temp_script.sql
 "
 
 # Limpiar el archivo temporal dentro del contenedor

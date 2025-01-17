@@ -1,0 +1,44 @@
+-- Insert data into the Comerciants table
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Comercializadora ABC', 1, 1, '1234567', 'comercializadora.abc@example.com', TO_DATE('2023-01-01', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Distribuidora XYZ', 2, 3, '9876543', 'distribuidora.xyz@example.com', TO_DATE('2023-02-15', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Supermercado El Trébol', 3, 5, '5551212', 'supermercado.eltrebol@example.com', TO_DATE('2023-03-10', 'YYYY-MM-DD'), 'Inactivo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Ferretería La Tuerca', 4, 6, '7778888', 'ferreteria.latuerca@example.com', TO_DATE('2023-04-20', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Tienda La Esquina', 5, 8, '3334444', 'tienda.laesquina@example.com', TO_DATE('2023-05-15', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Restaurante El Sabor', 1, 2, '9990000', 'restaurante.elsabor@example.com', TO_DATE('2023-06-01', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Cafetería La Aroma', 2, 4, '1112222', 'cafeteria.laaroma@example.com', TO_DATE('2023-07-12', 'YYYY-MM-DD'), 'Inactivo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Panadería El Trigal', 3, 5, '8887777', 'panaderia.eltrigal@example.com', TO_DATE('2023-08-18', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Librería El Saber', 4, 7, '4445555', 'libreria.elsaber@example.com', TO_DATE('2023-09-25', 'YYYY-MM-DD'), 'Activo', 1);
+INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) VALUES ('Farmacia La Salud', 5, 9, '2223333', 'farmacia.lasalud@example.com', TO_DATE('2023-10-10', 'YYYY-MM-DD'), 'Activo', 2);
+
+-- Insert data into the Establishments table
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (1, 'Sucursal Norte', 1500000, 15, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (1, 'Sucursal Centro', 1000000, 10, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (2, 'Sede Principal', 2000000, 20, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (3, 'Local 1', 500000, 5, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (4, 'Tienda Principal', 800000, 8, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (5, 'Local Esquina', 300000, 3, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (6, 'Restaurante Centro', 1200000, 12, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (7, 'Cafetería Sur', 700000, 7, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (8, 'Panadería Norte', 900000, 9, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (9, 'Librería Centro', 600000, 6, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (10, 'Farmacia Principal', 400000, 4, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (1, 'Sucursal Occidente', 1200000, 12, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (2, 'Sucursal Oriente', 1800000, 18, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (3, 'Local 2', 700000, 7, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (4, 'Tienda Secundaria', 1000000, 10, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (5, 'Local Centro', 500000, 5, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (6, 'Restaurante Norte', 1500000, 15, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (7, 'Cafetería Occidente', 900000, 9, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (8, 'Panadería Sur', 1100000, 11, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (9, 'Librería Secundaria', 800000, 8, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (10, 'Farmacia Centro', 600000, 6, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (1, 'Sucursal Sur', 1100000, 11, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (2, 'Sucursal Centro', 1600000, 16, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (3, 'Local 3', 800000, 8, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (4, 'Tienda Pequeña', 900000, 9, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (5, 'Local Norte', 400000, 4, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (6, 'Restaurante Sur', 1300000, 13, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (7, 'Cafetería Oriente', 800000, 8, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (8, 'Panadería Occidente', 1000000, 10, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (9, 'Librería Norte', 700000, 7, 1);
+INSERT INTO Establishments (commerciant_id, name, revenue, employee_count, created_by) VALUES (10, 'Farmacia Sur', 500000, 5, 2);

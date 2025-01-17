@@ -1,17 +1,18 @@
 -- Create roles Table
-CREATE TABLE ROLES (
-    id NUMBER PRIMARY KEY,
+CREATE TABLE pacificode_user.ROLES (
+    id NUMBER NOT NULL,
     role_name VARCHAR2(100) NOT NULL,
     description VARCHAR2(255),
     creation_date DATE DEFAULT SYSDATE,
     created_by VARCHAR2(100),
     update_date DATE,
+    CONSTRAINT pk_roles PRIMARY KEY (id),
     updated_by VARCHAR2(100)
 );
 
 -- Create users Table
-CREATE TABLE Users (
-    id NUMBER PRIMARY KEY,
+CREATE TABLE pacificode_user.Users (
+    id NUMBER NOT NULL,
     name VARCHAR2(100) NOT NULL,
     password VARCHAR2(100) NOT NULL,
     email VARCHAR2(150) NOT NULL UNIQUE,
@@ -21,27 +22,30 @@ CREATE TABLE Users (
     created_by VARCHAR2(255) DEFAULT USER NOT NULL,
     update_date DATE DEFAULT SYSDATE NOT NULL,
     updated_by VARCHAR2(255) DEFAULT USER NOT NULL,
+    CONSTRAINT pk_users PRIMARY KEY (id),
     CONSTRAINT fk_users_roles FOREIGN KEY (role_id) REFERENCES ROLES(id)
 );
 
 
 -- Create departments Table
-CREATE TABLE Departments (
-    id NUMBER PRIMARY KEY,
-    name VARCHAR2(255) NOT NULL
+CREATE TABLE pacificode_user.Departments (
+    id NUMBER NOT NULL,
+    name VARCHAR2(255) NOT NULL,
+    CONSTRAINT pk_departments PRIMARY KEY (id)
 );
 
 -- Create cities Table
-CREATE TABLE Cities (
-    id NUMBER PRIMARY KEY,
+CREATE TABLE pacificode_user.Cities (
+    id NUMBER NOT NULL,
     department_id NUMBER NOT NULL,
     name VARCHAR2(255) NOT NULL,
+    CONSTRAINT pk_cities PRIMARY KEY (id),
     CONSTRAINT fk_municipalities_departments FOREIGN KEY (department_id) REFERENCES Departments(id)
 );
 
 -- Create comerciants Table
-CREATE TABLE Comerciants (
-    id NUMBER PRIMARY KEY,
+CREATE TABLE pacificode_user.Comerciants (
+    id NUMBER NOT NULL,
     name VARCHAR2(255) NOT NULL,
     department_id NUMBER NOT NULL,
     city_id NUMBER NOT NULL,
@@ -53,13 +57,14 @@ CREATE TABLE Comerciants (
     created_by VARCHAR2(255) DEFAULT USER NOT NULL,
     update_date DATE DEFAULT SYSDATE NOT NULL,
     updated_by VARCHAR2(255) DEFAULT USER NOT NULL,
+    CONSTRAINT pk_comerciants PRIMARY KEY (id),
     CONSTRAINT fk_commerciants_departments FOREIGN KEY (department_id) REFERENCES Departments(id),
     CONSTRAINT fk_commerciants_municipalities FOREIGN KEY (city_id) REFERENCES Cities(id)
 );
 
 -- Create establishments Table
-CREATE TABLE Establishments (
-    id NUMBER PRIMARY KEY,
+CREATE TABLE pacificode_user.Establishments (
+    id NUMBER NOT NULL,
     commerciant_id NUMBER NOT NULL,
     name VARCHAR2(255) NOT NULL,
     revenue NUMBER(10,2) NOT NULL,
@@ -68,5 +73,7 @@ CREATE TABLE Establishments (
     created_by VARCHAR2(255) DEFAULT USER NOT NULL,
     update_date DATE DEFAULT SYSDATE NOT NULL,
     updated_by VARCHAR2(255) DEFAULT USER NOT NULL,
+    CONSTRAINT pk_establishments PRIMARY KEY (id),
     CONSTRAINT fk_establishments_commerciants FOREIGN KEY (commerciant_id) REFERENCES Comerciants(id)
 );
+
