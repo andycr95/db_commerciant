@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONTAINER_NAME="oracle-db"
-DB_USER="pacificode_user"
+DB_USER="com_user"
 SQL_FILE_DROP_SEED="/drop_seed.sql"
 SQL_FILE_INIT_SEED="/init_seed.sql"
 SQL_FILE_DATA_SEED="/data_seed.sql"

@@ -1,8 +1,7 @@
 CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
 
     -- Function to query a comerciant by ID
-    FUNCTION consult_by_id (p_id IN Comerciants.id%TYPE) 
-    RETURN ComerciantRecord IS
+    FUNCTION consult_by_id(p_id IN NUMBER) RETURN ComerciantRecord IS
         v_comerciant ComerciantRecord;
     BEGIN
         SELECT c.name, 
@@ -12,7 +11,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
             c.email, 
             c.registration_date, 
             c.status,
-            SUM(e.revenue) AS total_assets, 
+            SUM(e.revenue) AS total_assets,
             SUM(e.employee_count) AS number_of_employees
         INTO v_comerciant
         FROM Comerciants c
@@ -28,10 +27,10 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
             RETURN NULL;
     END consult_by_id;
 
-    -- Function to query comerciant with filters and pagination
+
     FUNCTION consult (
         p_name IN Comerciants.name%TYPE DEFAULT NULL,
-        p_city IN Cities.name%TYPE DEFAULT NULL,
+        p_city IN Comerciants.city_id%TYPE DEFAULT NULL,
         p_registration_date IN Comerciants.registration_date%TYPE DEFAULT NULL,
         p_status IN Comerciants.status%TYPE DEFAULT NULL,
         p_page IN NUMBER DEFAULT 1,
@@ -40,7 +39,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
         v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
-        SELECT c.name, 
+        SELECT c.id, 
+                c.name, 
                d.name AS department, 
                m.name AS city, 
                c.phone, 
@@ -54,10 +54,10 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
         JOIN Cities m ON c.city_id = m.id
         LEFT JOIN Establishments e ON c.id = e.commerciant_id
         WHERE (p_name IS NULL OR c.name LIKE '%' || p_name || '%')
-          AND (p_city IS NULL OR m.name LIKE '%' || p_city || '%')
+          AND (p_city IS NULL OR c.city_id = p_city)
           AND (p_registration_date IS NULL OR c.registration_date = p_registration_date)
           AND (p_status IS NULL OR c.status = p_status)
-        GROUP BY c.name, d.name, m.name, c.phone, c.email, c.registration_date, c.status
+        GROUP BY c.id, c.name, d.name, m.name, c.phone, c.email, c.registration_date, c.status
         ORDER BY c.name
         OFFSET (p_page - 1) * p_records_by_page ROWS
         FETCH NEXT p_records_by_page ROWS ONLY;
@@ -67,6 +67,28 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
         WHEN OTHERS THEN
             RETURN NULL;
     END consult;
+
+    FUNCTION total_comerciants (
+        p_name IN Comerciants.name%TYPE DEFAULT NULL,
+        p_city IN Comerciants.city_id%TYPE DEFAULT NULL,
+        p_registration_date IN Comerciants.registration_date%TYPE DEFAULT NULL,
+        p_status IN Comerciants.status%TYPE DEFAULT NULL
+    ) RETURN NUMBER IS
+        v_total NUMBER;
+    BEGIN
+        SELECT COUNT(*)
+        INTO v_total
+        FROM Comerciants c
+        WHERE (p_name IS NULL OR c.name LIKE '%' || p_name || '%')
+          AND (p_city IS NULL OR c.city_id = p_city)
+          AND (p_registration_date IS NULL OR c.registration_date = p_registration_date)
+          AND (p_status IS NULL OR c.status = p_status);
+
+        RETURN v_total;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RETURN NULL;
+    END total_comerciants;
 
     -- Procedure to create a new comerciant
     PROCEDURE create_comerciant (
@@ -94,6 +116,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
 
         INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) 
         VALUES (p_name, p_department_id, p_city_id, p_phone, p_email, p_registration_date, p_status, p_created_by);
+
+        COMMIT;
 
         p_error_code := 0;
         p_error_message := NULL;
@@ -139,6 +163,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
             updated_by = p_updated_by
         WHERE id = p_id;
 
+        COMMIT;
+
         p_error_code := 0;
         p_error_message := NULL;
     EXCEPTION
@@ -155,6 +181,9 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
     ) IS
     BEGIN
         DELETE FROM Comerciants WHERE id = p_id;
+        
+        COMMIT;
+        
         p_error_code := 0;
         p_error_message := NULL;
     EXCEPTION
@@ -164,7 +193,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
     END delete_comerciant;
 
     -- Function for reporting comerciants
-    FUNCTION report_comerciantes RETURN SYS_REFCURSOR IS
+    FUNCTION report_comerciants RETURN SYS_REFCURSOR IS
         v_cursor SYS_REFCURSOR;
     BEGIN
         OPEN v_cursor FOR
@@ -189,7 +218,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
     EXCEPTION
         WHEN OTHERS THEN
             RETURN NULL;
-    END report_comerciantes;
+    END report_comerciants;
 
 END pkg_comerciants;
 /

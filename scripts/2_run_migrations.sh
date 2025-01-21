@@ -4,7 +4,7 @@ CONTAINER_NAME="oracle-db"
 SQL_FILE="/init.sql"
 SQL_FILE_DROP="/drop_tables.sql"
 DB_PASSWORD="password"
-DB_USER="pacificode_user"
+DB_USER="com_user"
 DB_SERVICE="XEPDB1"
 
 # Verificar si el contenedor está en ejecución

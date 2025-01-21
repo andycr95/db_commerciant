@@ -1,6 +1,6 @@
 -- Create a new user
 DECLARE
-    username VARCHAR2(30) := 'pacificode_user';
+    username VARCHAR2(30) := 'com_user';
     password VARCHAR2(30) := 'password';
     default_tablespace VARCHAR2(30) := 'USERS';
     temporary_tablespace VARCHAR2(30) := 'TEMP';

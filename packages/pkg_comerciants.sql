@@ -8,24 +8,31 @@ CREATE OR REPLACE PACKAGE pkg_comerciants AS
         phone VARCHAR2(20),
         email VARCHAR2(255),
         registration_date DATE,
-        status VARCHAR2(20),
-        total_assets NUMBER,
-        number_of_employees NUMBER
+        status VARCHAR2(50),
+        total_assets NUMBER(20),
+        number_of_employees NUMBER(10)
     );
 
     -- Function to query a comerciant by ID
-    FUNCTION consult_by_id (p_id IN Comerciants.id%TYPE) 
-    RETURN ComerciantRecord;
+    FUNCTION consult_by_id(p_id IN NUMBER) RETURN ComerciantRecord;
 
     -- Function to query comerciant with filters and pagination
     FUNCTION consult (
         p_name IN Comerciants.name%TYPE DEFAULT NULL,
-        p_city IN cities.name%TYPE DEFAULT NULL,
+        p_city IN Comerciants.city_id%TYPE DEFAULT NULL,
         p_registration_date IN Comerciants.registration_date%TYPE DEFAULT NULL,
         p_status IN Comerciants.status%TYPE DEFAULT NULL,
         p_page IN NUMBER DEFAULT 1,
         p_records_by_page IN NUMBER DEFAULT 10
     ) RETURN SYS_REFCURSOR;
+
+    -- Function to query total comerciants
+    FUNCTION total_comerciants (
+        p_name IN Comerciants.name%TYPE DEFAULT NULL,
+        p_city IN Comerciants.city_id%TYPE DEFAULT NULL,
+        p_registration_date IN Comerciants.registration_date%TYPE DEFAULT NULL,
+        p_status IN Comerciants.status%TYPE DEFAULT NULL
+    ) RETURN NUMBER;
 
     -- Procedure to create a new xomerciant
     PROCEDURE create_comerciant (
@@ -64,7 +71,7 @@ CREATE OR REPLACE PACKAGE pkg_comerciants AS
     );
 
     -- Function for reporting comerciants
-    FUNCTION report_comerciantes RETURN SYS_REFCURSOR;
+    FUNCTION report_comerciants RETURN SYS_REFCURSOR;
 
 END pkg_comerciants;
 /

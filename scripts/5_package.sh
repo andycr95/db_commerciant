@@ -1,9 +1,11 @@
 #!/bin/bash
 
 CONTAINER_NAME="oracle-db"
-DB_USER="pacificode_user"
+DB_USER="com_user"
 SQL_FILE_PACKAGE="/pkg_comerciants.sql"
 SQL_FILE_PACKAGE_BODY="/pkg_comerciants_body.sql"
+SQL_FILE_PACKAGE_USER="/pkg_users.sql"
+SQL_FILE_PACKAGE_USER_BODY="/pkg_users_body.sql"
 DB_PASSWORD="password"
 DB_SERVICE="XEPDB1"
 
@@ -17,6 +19,8 @@ fi
 echo "Copiando el archivo SQL al contenedor..."
 docker cp ./packages/pkg_comerciants.sql "${CONTAINER_NAME}:${SQL_FILE_PACKAGE}"
 docker cp ./packages/pkg_comerciants_body.sql "${CONTAINER_NAME}:${SQL_FILE_PACKAGE_BODY}"
+docker cp ./packages/pkg_users.sql "${CONTAINER_NAME}:${SQL_FILE_PACKAGE_USER}"
+docker cp ./packages/pkg_users_body.sql "${CONTAINER_NAME}:${SQL_FILE_PACKAGE_USER_BODY}"
 
 
 # Ejecutar el script dentro del contenedor
@@ -27,6 +31,8 @@ docker exec -it "${CONTAINER_NAME}" bash -c "
   echo 'SET SERVEROUTPUT ON;' >> temp_script.sql;
   echo '@${SQL_FILE_PACKAGE};' >> temp_script.sql;
   echo '@${SQL_FILE_PACKAGE_BODY};' >> temp_script.sql;
+  echo '@${SQL_FILE_PACKAGE_USER};' >> temp_script.sql;
+  echo '@${SQL_FILE_PACKAGE_USER_BODY};' >> temp_script.sql;
   echo 'EXIT;' >> temp_script.sql;
   sqlplus ${DB_USER}/${DB_PASSWORD}@localhost/${DB_SERVICE} @temp_script.sql
 "
