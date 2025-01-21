@@ -48,7 +48,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
                c.registration_date, 
                c.status,
                SUM(e.revenue) AS total_assets, 
-               SUM(e.employee_count) AS number_of_employees
+               SUM(e.employee_count) AS number_of_employees,
+               COUNT(e.id) AS number_of_establishments
         FROM Comerciants c
         JOIN Departments d ON c.department_id = d.id
         JOIN Cities m ON c.city_id = m.id
@@ -101,6 +102,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
         p_status IN Comerciants.status%TYPE,
         p_created_by IN NUMBER,
         p_error_code OUT NUMBER,
+        p_id OUT NUMBER,
         p_error_message OUT VARCHAR2
     ) IS
     BEGIN
@@ -115,7 +117,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
         END IF;
 
         INSERT INTO Comerciants (name, department_id, city_id, phone, email, registration_date, status, created_by) 
-        VALUES (p_name, p_department_id, p_city_id, p_phone, p_email, p_registration_date, p_status, p_created_by);
+        VALUES (p_name, p_department_id, p_city_id, p_phone, p_email, p_registration_date, p_status, p_created_by)
+        RETURNING id INTO p_id;
 
         COMMIT;
 
@@ -173,6 +176,30 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
             p_error_message := SQLERRM;
     END update_comerciant;
 
+    -- Procedure to update status an existing comerciant
+    PROCEDURE update_comerciant_status (
+        p_id IN Comerciants.id%TYPE,
+        p_status IN Comerciants.status%TYPE,
+        p_updated_by IN NUMBER,
+        p_error_code OUT NUMBER,
+        p_error_message OUT VARCHAR2
+    ) IS
+    BEGIN
+        UPDATE Comerciants 
+        SET status = p_status,
+            updated_by = p_updated_by
+        WHERE id = p_id;
+
+        COMMIT;
+
+        p_error_code := 0;
+        p_error_message := NULL;
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_error_code := SQLCODE;
+            p_error_message := SQLERRM;
+    END update_comerciant_status;
+
     -- Procedimiento para eliminar un comerciant
     PROCEDURE delete_comerciant (
         p_id IN Comerciants.id%TYPE,
@@ -191,6 +218,25 @@ CREATE OR REPLACE PACKAGE BODY pkg_comerciants AS
             p_error_code := SQLCODE;
             p_error_message := SQLERRM;
     END delete_comerciant;
+
+    -- Procedimiento para eliminar un comerciant
+    PROCEDURE delete_establishments_comerciant (
+        p_commerciant_id IN Comerciants.id%TYPE,
+        p_error_code OUT NUMBER,
+        p_error_message OUT VARCHAR2
+    ) IS
+    BEGIN
+        DELETE FROM Establishments WHERE commerciant_id = p_commerciant_id;
+        
+        COMMIT;
+        
+        p_error_code := 0;
+        p_error_message := NULL;
+    EXCEPTION
+        WHEN OTHERS THEN
+            p_error_code := SQLCODE;
+            p_error_message := SQLERRM;
+    END delete_establishments_comerciant;
 
     -- Function for reporting comerciants
     FUNCTION report_comerciants RETURN SYS_REFCURSOR IS

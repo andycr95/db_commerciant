@@ -173,16 +173,11 @@ FOR EACH ROW
 DECLARE
   v_user_name VARCHAR2(255);
 BEGIN
-  BEGIN
-    SELECT name INTO v_user_name
-    FROM Users
-    WHERE id = :NEW.updated_by;
-    :NEW.updated_by := v_user_name;
-  EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-      :NEW.updated_by := 'Usuario desconocido';
-  END;
+  SELECT name INTO v_user_name
+  FROM Users
+  WHERE id = :NEW.updated_by;
 
+  :NEW.updated_by := NVL(v_user_name, 'Usuario desconocido');
   :NEW.update_date := SYSDATE;
 
 EXCEPTION

@@ -45,6 +45,7 @@ CREATE OR REPLACE PACKAGE pkg_comerciants AS
         p_status IN Comerciants.status%TYPE,
         p_created_by IN NUMBER,
         p_error_code OUT NUMBER,
+        p_id OUT NUMBER,
         p_error_message OUT VARCHAR2
     );
 
@@ -63,9 +64,24 @@ CREATE OR REPLACE PACKAGE pkg_comerciants AS
         p_error_message OUT VARCHAR2
     );
 
+    -- Procedure to update an existing comerciant
+    PROCEDURE update_comerciant_status (
+        p_id IN Comerciants.id%TYPE,
+        p_status IN Comerciants.status%TYPE,
+        p_updated_by IN NUMBER,
+        p_error_code OUT NUMBER,
+        p_error_message OUT VARCHAR2
+    );
+
     -- Procedure to delete a comerciant
     PROCEDURE delete_comerciant (
         p_id IN Comerciants.id%TYPE,
+        p_error_code OUT NUMBER,
+        p_error_message OUT VARCHAR2
+    );
+
+    PROCEDURE delete_establishments_comerciant (
+        p_commerciant_id IN Comerciants.id%TYPE,
         p_error_code OUT NUMBER,
         p_error_message OUT VARCHAR2
     );
